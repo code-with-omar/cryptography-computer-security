@@ -1,16 +1,15 @@
-// const generatedKey = (string, key) => {
-//     key = key.split('');
-//     console.log(key);
-//     if (string.length === key.length) {
-//         return key.join("");
-//     } else {
-//         for (let i = 0; i < string.length - key.length; i++) {
-//             key.push(key[i % key.length]);
-//         }
-//         return key.join('');
-//     }
+const generatedKey = (string, key) => {
+    let keyLen = key.length
+    key = key.split('');
+    console.log(key);
 
-// }
+    for (let i = 0; i < string.length - keyLen; i++) {
+        key.push(key[i % key.length]);
+    }
+    return key.join('');
+
+
+}
 
 const cipherText = (string, key) => {
     string = string.toUpperCase();
@@ -51,7 +50,12 @@ const decrypt = (cipherText, key) => {
     return decipherText;
 }
 let string = "playfair";
-let keyword = "hellohel";
+let keyword = "ice";
+if (string.length !== keyword.length) {
+    let key = keyword
+    keyword = generatedKey(string, key)
+    console.log(keyword);
+}
 console.log("Plain text : ", string);
 console.log("Key: ", keyword);
 console.log("==================================")
