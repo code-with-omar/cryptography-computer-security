@@ -50,10 +50,10 @@ const decrypt = (cipherText, key) => {
     }
     return decipherText;
 }
-let string = "OMARFARUK";
-let keyword = "PLAYFAIRL";
-console.log("Plain text : ",string);
-console.log("Key: ",keyword);
+let string = "playfair";
+let keyword = "hellohel";
+console.log("Plain text : ", string);
+console.log("Key: ", keyword);
 console.log("==================================")
 let cipherTextGenerate = cipherText(string, keyword);
 console.log("Cipher text : ", cipherTextGenerate);

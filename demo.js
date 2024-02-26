@@ -1,38 +1,99 @@
-function generateKey(length) {
-    let key = "";
-    for (let i = 0; i < length; i++) {
-        key += String.fromCharCode(Math.floor(Math.random() * 26) + 65); // ASCII codes for A-Z
+function encryptRailFence(text, key) {
+    let rail = new Array(key);
+    for (let i = 0; i < key; i++) {
+        rail[i] = new Array(text.length).fill('\n');
     }
-    return key;
+    console.log(rail)
+
+    let dir_down = false;
+    let row = 0, col = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        if (row === 0 || row === key - 1) {
+            dir_down = !dir_down;
+        }
+
+        rail[row][col] = text[i];
+        col += 1;
+
+        if (dir_down) {
+            row += 1;
+        } else {
+            row -= 1;
+        }
+    }
+
+    let result = "";
+    for (let i = 0; i < key; i++) {
+        for (let j = 0; j < text.length; j++) {
+            if (rail[i][j] !== '\n') {
+                result += rail[i][j];
+            }
+        }
+    }
+    return result;
 }
 
-function encrypt(plaintext, key) {
-    let ciphertext = "";
-    let cipherCode = [];
-    for (let i = 0; i < plaintext.length; i++) {
-        let x = plaintext.charCodeAt(i) ^ key.charCodeAt(i);
-        cipherCode.push(x);
-        ciphertext += String.fromCharCode(x % 26 + 65);
+function decryptRailFence(cipher, key) {
+    let rail = new Array(key);
+    for (let i = 0; i < key; i++) {
+        rail[i] = new Array(cipher.length).fill('\n');
     }
-    return [ciphertext, cipherCode];
+
+    let dir_down = null;
+    let row = 0, col = 0;
+
+    for (let i = 0; i < cipher.length; i++) {
+        if (row === 0) {
+            dir_down = true;
+        }
+        if (row === key - 1) {
+            dir_down = false;
+        }
+
+        rail[row][col] = '*';
+        col += 1;
+
+        if (dir_down) {
+            row += 1;
+        } else {
+            row -= 1;
+        }
+    }
+
+    let index = 0;
+    for (let i = 0; i < key; i++) {
+        for (let j = 0; j < cipher.length; j++) {
+            if (rail[i][j] === '*' && index < cipher.length) {
+                rail[i][j] = cipher[index];
+                index += 1;
+            }
+        }
+    }
+
+    let result = "";
+    row = 0, col = 0;
+    for (let i = 0; i < cipher.length; i++) {
+        if (row === 0) {
+            dir_down = true;
+        }
+        if (row === key - 1) {
+            dir_down = false;
+        }
+
+        if (rail[row][col] !== '*') {
+            result += rail[row][col];
+            col += 1;
+        }
+
+        if (dir_down) {
+            row += 1;
+        } else {
+            row -= 1;
+        }
+    }
+    return result;
 }
 
-function decrypt(cipherCode, key) {
-    let plaintext = "";
-    for (let i = 0; i < cipherCode.length; i++) {
-        let x = (cipherCode[i] ^ key.charCodeAt(i));
-        plaintext += String.fromCharCode(x);
-    }
-    return plaintext;
-}
-
-let plaintext = "Information";
-let key = generateKey(plaintext.length); // Generate a random key
-
-let result = encrypt(plaintext, key);
-let ciphertext = result[0];
-let cipherCode = result[1];
-console.log(cipherCode)
-console.log("Ciphertext:", ciphertext);
-let decryptedtext = decrypt(cipherCode, key);
-console.log("Decrypted text:", decryptedtext);
+console.log(encryptRailFence("attack at once", 2));
+// console.log(decryptRailFence("atc toctaka ne", 2));
